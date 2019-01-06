@@ -74,19 +74,3 @@ app.post('/deviceID', function (req, res) {
     }).sort({ ts: -1 })
   //sort 排序 倒序
 })
-
-app.get('/uniq', function (req, res) {
-
-  var user = [
-    { age: 20, name: "John" },
-    { age: 31, name: "Mary" },
-    { age: 20, name: "John" }
-  ];
-
-  var uniq_user = _.uniq(user, false, function (item) {
-    return item.name && item.age;
-  });
-  console.log(uniq_user);
-  // [{age: 20, name: "John"},{age: 31, name: "Mary"}]
-  console.log(uniq_user.length);  // 2
-})

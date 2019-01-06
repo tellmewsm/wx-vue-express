@@ -32,7 +32,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" -->
     <div>
       <el-table ref="filterTable"
                 :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
@@ -43,11 +42,11 @@
                 stripe
                 id="devices">
         <!-- 默认的暂无数据更换成图片 -->
-        <!-- <template slot="empty">
-        <img class="data-pic"
-             src="#"
-             alt="无数据" />
-         </template> -->
+        <template slot="empty">
+          <img class="data-pic"
+               src="#"
+               alt="无数据" />
+        </template>
         <!-- fixed导致excel 第一种方法导出2份 -->
         <el-table-column label="Time"
                          width="200"
@@ -117,9 +116,9 @@
 
 <script>
 import { formatDate } from '@/api/date.js'
+import { uniqDevice } from '@/api/uniq.js'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
-import _ from 'underscore'
 export default {
   name: 'device',
   data () {
@@ -175,6 +174,7 @@ export default {
       }).then((response) => {
         console.log(response.data)
         this.tableData = response.data
+        this.uniqdevice(this.tableData)
       })
     },
     searchDevice () {
@@ -202,6 +202,7 @@ export default {
           console.log(response.data)
           this.loading.close()
           this.tableData = response.data
+          this.uniqdevice(this.tableData)
         })
       }
     },
@@ -236,27 +237,13 @@ export default {
 
       return wbout
     },
-    // 导出excle的2个方法
-    export2Excel () {
-      require.ensure([], () => {
-        // eslint-disable-next-line camelcase
-        const { export_json_to_excel } = require('@/vendor/Export2Excel')
-        const tHeader = ['Time', 'id', 'username', 'Pid', 'Td', 'AuthOk', 'Ip', 'onOff']
-        const filterVal = ['ts', 'id', 'username', 'pid', 'td', 'authOk', 'ip', 'evt']
-        const list = this.tableData
-        const data = this.formatJson(filterVal, list)
-        export_json_to_excel(tHeader, data, 'Devices')
+    uniqdevice (table) {
+      this.tableData = uniqDevice(table, function (item) {
+        return item.ts + item.id + item.username + item.pid + item.td + item.authOk + item.ip + item.evt
       })
-    },
-    formatJson (filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
-    },
-
-    uniq (table) {
-      _.uniq(table, true, function (item) {
-        return item.ts && item.name && item.evt
-      })
+      console.log(this.tableData)
     }
+
   },
   filters: {
     formatDate (time) {

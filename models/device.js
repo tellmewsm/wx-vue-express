@@ -7,6 +7,8 @@ var produtSchema = new Schema({
   '_id': Object,
   'id': String,
   'name': String,
+  'username': String,
+  'authOk': String,
   'ts': Number,
   'pid': String,
   'evt': String,
@@ -33,5 +35,5 @@ mongoose.connection.on('disconnected', () => {
   console.log('数据库连接断开！')
 })
 
-//xxxx映射的表
+// xxxx映射的表
 module.exports = mongoose.model('device', produtSchema, 'xxxx')
