@@ -6,10 +6,6 @@ _ = require('underscore')
 const app = express()
 app.use(bodyParser.json())
 
-//express 路由访问不同地址
-var devicesRouter = require('./router/db');
-
-app.use('/router', devicesRouter);
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //跨域
@@ -19,9 +15,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-var devices = require('./models/device')
+var devices = require('./mongoose_config')
 //定义服务启动端口
-app.listen(3033, () => {
+app.listen(500, () => {
   console.log('app listening on port 3033')
 })
 

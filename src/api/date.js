@@ -1,5 +1,9 @@
-// 时间戳格式化
-export function formatDate (date, fmt) {
+
+module.exports = {
+  // function padLeftZero(str) {
+  //   return ('00' + str).substr(str.length)
+  // }
+formatDate:function(date, fmt) {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
@@ -13,12 +17,10 @@ export function formatDate (date, fmt) {
   for (const k in o) {
     const str = o[k] + ''
     if (new RegExp(`(${k})`).test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length))
     }
   }
   return fmt
 }
 
-function padLeftZero (str) {
-  return ('00' + str).substr(str.length)
 }
